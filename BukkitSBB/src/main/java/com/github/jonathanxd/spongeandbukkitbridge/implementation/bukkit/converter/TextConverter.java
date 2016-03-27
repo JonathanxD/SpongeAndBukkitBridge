@@ -63,7 +63,7 @@ public class TextConverter {
 
     public static ChatColor convert(ColorTextComponent colorTextComponent) {
         Colors color = colorTextComponent.getColor();
-        Optional<Field> fieldWithValue = Reflection.getFieldWithValue(colorTextComponent, color);
+        Optional<Field> fieldWithValue = Reflection.getFieldWithValue(null, Colors.class, color);
 
         if (fieldWithValue.isPresent()) {
             Field field = fieldWithValue.get();

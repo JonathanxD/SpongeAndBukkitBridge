@@ -28,7 +28,6 @@
 package com.github.jonathanxd.spongeandbukkitbridge.api.text.components;
 
 import com.github.jonathanxd.spongeandbukkitbridge.api.text.color.Colors;
-import com.github.jonathanxd.spongeandbukkitbridge.api.text.components.TextComponent;
 
 /**
  * Created by jonathan on 27/03/16.

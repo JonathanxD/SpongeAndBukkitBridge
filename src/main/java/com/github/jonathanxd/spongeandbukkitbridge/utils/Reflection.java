@@ -44,9 +44,9 @@ public class Reflection {
         return getField(instance, instance.getClass(), fieldName);
     }
 
-    public static Optional<Field> getFieldWithValue(Object instance, Object value) {
+    public static Optional<Field> getFieldWithValue(Object instance, Class<?> clazz, Object value) {
 
-        for(Field f : instance.getClass().getDeclaredFields()) {
+        for(Field f : clazz.getDeclaredFields()) {
             try {
                 f.setAccessible(true);
                 if(f.get(instance).equals(value)) {
