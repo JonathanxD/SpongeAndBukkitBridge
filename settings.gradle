@@ -1,0 +1,3 @@
+rootProject.name = "SpongeAndBukkitBridge"
+include 'BukkitSBB'
+include 'SpongeSBB'
