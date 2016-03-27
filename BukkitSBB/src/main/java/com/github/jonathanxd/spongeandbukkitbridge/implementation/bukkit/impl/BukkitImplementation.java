@@ -36,6 +36,7 @@ import java.util.logging.Logger;
 
 import com.github.jonathanxd.spongeandbukkitbridge.api.events.manager.EventManagerSB;
 import com.github.jonathanxd.spongeandbukkitbridge.api.logging.LoggerSBLegacy;
+import com.github.jonathanxd.spongeandbukkitbridge.implementation.bukkit.impl.logging.LoggerSBBukkit;
 import com.github.jonathanxd.spongeandbukkitbridge.plugin.PluginDataBuilder;
 import com.github.jonathanxd.spongeandbukkitbridge.plugin.PluginHolder;
 import com.github.jonathanxd.spongeandbukkitbridge.statics.AbstractImplementation;
@@ -64,7 +65,7 @@ public class BukkitImplementation extends AbstractImplementation {
 
     @Override
     public void onPluginLoadStart(PluginHolder<?> pluginHolder) {
-        pluginHolder.setLoggerSB(new LoggerSBLegacy(Logger.getLogger(pluginHolder.getPluginDataBuilder().getName())));
+        pluginHolder.setLoggerSB(new LoggerSBBukkit(pluginHolder.getPluginDataBuilder(), Logger.getGlobal()));
     }
 
     @Override

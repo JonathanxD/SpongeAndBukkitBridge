@@ -25,42 +25,53 @@
  *      OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *      THE SOFTWARE.
  */
-package com.github.jonathanxd.spongeandbukkitbridge.implementation.bukkit.impl;
+package com.github.jonathanxd.spongeandbukkitbridge.implementation.bukkit.converter;
 
-import com.github.jonathanxd.spongeandbukkitbridge.api.entities.living.player.Player;
 import com.github.jonathanxd.spongeandbukkitbridge.api.text.Text;
-import com.github.jonathanxd.spongeandbukkitbridge.implementation.bukkit.converter.TextConverter;
+import com.github.jonathanxd.spongeandbukkitbridge.api.text.color.Colors;
+import com.github.jonathanxd.spongeandbukkitbridge.api.text.components.ColorTextComponent;
+import com.github.jonathanxd.spongeandbukkitbridge.api.text.components.StringTextComponent;
+import com.github.jonathanxd.spongeandbukkitbridge.api.text.components.TextComponent;
+import com.github.jonathanxd.spongeandbukkitbridge.utils.Reflection;
+
+import org.bukkit.ChatColor;
+
+import java.lang.reflect.Field;
+import java.util.Optional;
 
 /**
- * Created by jonathan on 20/01/16.
+ * Created by jonathan on 27/03/16.
  */
-public class PlayerBack implements Player {
+public class TextConverter {
 
-    private final org.bukkit.entity.Player bukkitPlayer;
 
-    public PlayerBack(org.bukkit.entity.Player bukkitPlayer) {
-        this.bukkitPlayer = bukkitPlayer;
-    }
+    public static String convertLegacy(Text text) {
 
-    @Override
-    public void sendMessage(Text text) {
-        bukkitPlayer.sendMessage(TextConverter.convertLegacy(text));
-    }
-
-    @Override
-    public void sendMessage(Text... texts) {
-        for(Text text : texts) {
-            bukkitPlayer.sendMessage(TextConverter.convertLegacy(text));
+        StringBuilder stringBuilder = new StringBuilder();
+        for (TextComponent component : text.getComponents()) {
+            if (component instanceof ColorTextComponent) {
+                stringBuilder.append(convert((ColorTextComponent) component));
+            }
+            if (component instanceof StringTextComponent) {
+                stringBuilder.append(((StringTextComponent) component).getContent());
+            }
         }
+
+        return stringBuilder.toString();
+
     }
 
-    @Override
-    public void sendMessage(String message) {
-        bukkitPlayer.sendMessage(message);
+    public static ChatColor convert(ColorTextComponent colorTextComponent) {
+        Colors color = colorTextComponent.getColor();
+        Optional<Field> fieldWithValue = Reflection.getFieldWithValue(colorTextComponent, color);
+
+        if (fieldWithValue.isPresent()) {
+            Field field = fieldWithValue.get();
+
+            return ChatColor.valueOf(field.getName().toUpperCase());
+        }
+
+        return null;
     }
 
-    @Override
-    public void sendMessage(String... messages) {
-        bukkitPlayer.sendMessage(messages);
-    }
 }

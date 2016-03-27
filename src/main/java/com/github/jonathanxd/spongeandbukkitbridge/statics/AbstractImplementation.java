@@ -51,6 +51,7 @@ public abstract class AbstractImplementation implements Implementation {
     @Override
     public void pluginLoadStart(PluginHolder<?> pluginHolder) {
         onPluginLoadStart(pluginHolder);
+        pluginList.add(pluginHolder);
     }
 
     @Override
@@ -58,8 +59,8 @@ public abstract class AbstractImplementation implements Implementation {
 
         boolean load = onPluginLoad(pluginHolder);
 
-        if(load) {
-            pluginList.add(pluginHolder);
+        if(!load) {
+            pluginList.remove(pluginHolder);
         }
 
         return load;
@@ -74,9 +75,9 @@ public abstract class AbstractImplementation implements Implementation {
 
         if(plugin1.isPresent()) {
             return Optional.of(plugin1.get().getLogger());
+        } else {
+            throw new RuntimeException("Cannot get plugin: "+plugin);
         }
-
-        return null;
     }
 
     @Override

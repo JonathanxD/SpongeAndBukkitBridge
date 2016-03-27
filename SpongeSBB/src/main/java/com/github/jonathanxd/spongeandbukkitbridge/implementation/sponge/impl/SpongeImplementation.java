@@ -27,18 +27,17 @@
  */
 package com.github.jonathanxd.spongeandbukkitbridge.implementation.sponge.impl;
 
-import com.github.jonathanxd.spongeandbukkitbridge.api.logging.LoggerSB;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.spongepowered.api.Game;
-
 import com.github.jonathanxd.spongeandbukkitbridge.api.events.manager.EventManagerSB;
+import com.github.jonathanxd.spongeandbukkitbridge.api.logging.LoggerSB;
 import com.github.jonathanxd.spongeandbukkitbridge.implementation.sponge.impl.event.EventManagerSBImpl;
 import com.github.jonathanxd.spongeandbukkitbridge.implementation.sponge.impl.logger.LoggerSBImpl;
 import com.github.jonathanxd.spongeandbukkitbridge.plugin.PluginDataBuilder;
 import com.github.jonathanxd.spongeandbukkitbridge.plugin.PluginHolder;
 import com.github.jonathanxd.spongeandbukkitbridge.statics.AbstractImplementation;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.spongepowered.api.Game;
 
 /**
  * Created by jonathan on 27/03/16.
@@ -48,9 +47,8 @@ public class SpongeImplementation extends AbstractImplementation {
     private static final String VERSION = "1.0";
     private static final String SPONGE_TARGET_VERSION = "4.0.3";
     private static final String MC_TARGET_VERSION = "1.8.9";
-    private final LoggerSB loggerSB;
     private static final EventManagerSB manager = new EventManagerSBImpl();
-
+    private final LoggerSB loggerSB;
     private final Game game;
     private final Logger logger;
 
@@ -79,17 +77,16 @@ public class SpongeImplementation extends AbstractImplementation {
     public void onPluginLoadStart(PluginHolder<?> pluginHolder) {
         PluginDataBuilder pluginDataBuilder = pluginHolder.getPluginDataBuilder();
 
-        logger.info("Loading plugin %s", pluginDataBuilder.getName());
+        logger.info(String.format("Loading plugin %s", pluginDataBuilder.getName()));
 
         pluginHolder.setLoggerSB(new LoggerSBImpl(LoggerFactory.getLogger(pluginDataBuilder.getName())));
     }
 
     @Override
     public boolean onPluginLoad(PluginHolder<?> pluginHolder) {
-
         PluginDataBuilder pluginDataBuilder = pluginHolder.getPluginDataBuilder();
 
-        logger.info("Loaded plugin %s!", pluginDataBuilder.getName());
+        logger.info(String.format("Loaded plugin %s!", pluginDataBuilder.getName()));
 
         return true;
     }
@@ -102,7 +99,7 @@ public class SpongeImplementation extends AbstractImplementation {
 
     @Override
     public EventManagerSB getEventManager() {
-        return null;
+        return manager;
     }
 
 }

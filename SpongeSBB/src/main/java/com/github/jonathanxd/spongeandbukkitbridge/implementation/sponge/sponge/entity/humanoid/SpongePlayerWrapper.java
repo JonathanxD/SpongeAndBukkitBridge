@@ -30,6 +30,7 @@ package com.github.jonathanxd.spongeandbukkitbridge.implementation.sponge.sponge
 import org.spongepowered.api.text.Text;
 
 import com.github.jonathanxd.spongeandbukkitbridge.api.entities.living.player.Player;
+import com.github.jonathanxd.spongeandbukkitbridge.implementation.sponge.converter.TextConverter;
 
 /**
  * Created by jonathan on 27/03/16.
@@ -44,7 +45,26 @@ public class SpongePlayerWrapper implements Player {
 
 
     @Override
+    public void sendMessage(com.github.jonathanxd.spongeandbukkitbridge.api.text.Text text) {
+        player.sendMessage(TextConverter.convert(text));
+    }
+
+    @Override
+    public void sendMessage(com.github.jonathanxd.spongeandbukkitbridge.api.text.Text... texts) {
+        for(com.github.jonathanxd.spongeandbukkitbridge.api.text.Text text : texts) {
+            player.sendMessage(TextConverter.convert(text));
+        }
+    }
+
+    @Override
     public void sendMessage(String message) {
         player.sendMessage(Text.of(message));
+    }
+
+    @Override
+    public void sendMessage(String... messages) {
+        for(String message : messages) {
+            player.sendMessage(Text.of(message));
+        }
     }
 }

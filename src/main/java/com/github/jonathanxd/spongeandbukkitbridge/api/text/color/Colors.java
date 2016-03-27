@@ -1,5 +1,5 @@
 /*
- *      BukkitSBB - Bukkit Implementation of SpongeAndBukkitBridge <https://github.com/JonathanxD/WCommands>
+ *      SpongeAndBukkitBridge - Sponge & Bukkit Bridge - A Plugin API! <https://github.com/JonathanxD/WCommands>
  *
  *         The MIT License (MIT)
  *
@@ -25,19 +25,33 @@
  *      OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *      THE SOFTWARE.
  */
-package com.github.jonathanxd.spongeandbukkitbridge.implementation.bukkit.impl;
-
-import org.bukkit.Bukkit;
-
-import com.github.jonathanxd.spongeandbukkitbridge.api.logging.LoggerSBLegacy;
+package com.github.jonathanxd.spongeandbukkitbridge.api.text.color;
 
 /**
- * Created by jonathan on 20/01/16.
+ * Created by jonathan on 27/03/16.
  */
-public class LoggerSBImpl extends LoggerSBLegacy {
+public class Colors {
 
-    public LoggerSBImpl() {
-        super(Bukkit.getLogger());
-    }
+    private Colors(){}
+
+    public static final Colors RED = new Colors();
+    public static final Colors GOLD = new Colors();
+    public static final Colors GRAY = new Colors();
+    public static final Colors AQUA = new Colors();
+    public static final Colors BLUE = new Colors();
+    public static final Colors GREEN = new Colors();
+    public static final Colors BLACK = new Colors();
+    public static final Colors WHITE = new Colors();
+    public static final Colors RESET = new Colors();
+    public static final Colors YELLOW = new Colors();
+    public static final Colors DARK_RED = new Colors();
+    public static final Colors DARK_BLUE = new Colors();
+    public static final Colors DARK_GRAY = new Colors();
+    public static final Colors DARK_AQUA = new Colors();
+    public static final Colors DARK_GREEN = new Colors();
+    public static final Colors DARK_PURPLE = new Colors();
+    public static final Colors LIGHT_PURPLE = new Colors();
+
+
 
 }

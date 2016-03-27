@@ -1,5 +1,5 @@
 /*
- *      BukkitSBB - Bukkit Implementation of SpongeAndBukkitBridge <https://github.com/JonathanxD/WCommands>
+ *      SpongeAndBukkitBridge - Sponge & Bukkit Bridge - A Plugin API! <https://github.com/JonathanxD/WCommands>
  *
  *         The MIT License (MIT)
  *
@@ -25,19 +25,19 @@
  *      OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *      THE SOFTWARE.
  */
-package com.github.jonathanxd.spongeandbukkitbridge.implementation.bukkit.impl;
+package com.github.jonathanxd.spongeandbukkitbridge.api.common;
 
-import org.bukkit.Bukkit;
-
-import com.github.jonathanxd.spongeandbukkitbridge.api.logging.LoggerSBLegacy;
+import com.github.jonathanxd.spongeandbukkitbridge.api.text.Text;
 
 /**
- * Created by jonathan on 20/01/16.
+ * Created by jonathan on 27/03/16.
  */
-public class LoggerSBImpl extends LoggerSBLegacy {
+public interface MessageReceiver {
 
-    public LoggerSBImpl() {
-        super(Bukkit.getLogger());
-    }
+    void sendMessage(Text text);
+    void sendMessage(Text... texts);
+
+    void sendMessage(String message);
+    void sendMessage(String... messages);
 
 }

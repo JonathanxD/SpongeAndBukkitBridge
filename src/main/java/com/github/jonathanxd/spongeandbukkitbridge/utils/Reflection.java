@@ -44,6 +44,32 @@ public class Reflection {
         return getField(instance, instance.getClass(), fieldName);
     }
 
+    public static Optional<Field> getFieldWithValue(Object instance, Object value) {
+
+        for(Field f : instance.getClass().getDeclaredFields()) {
+            try {
+                f.setAccessible(true);
+                if(f.get(instance).equals(value)) {
+                    return Optional.of(f);
+                }
+            } catch (Exception ignored) {}
+        }
+
+        return Optional.empty();
+    }
+
+    public static Optional<Field> getField(Class<?> instanceClass, String fieldName) {
+        try{
+            Field declaredField = instanceClass.getDeclaredField(fieldName);
+            if(!declaredField.isAccessible())
+                declaredField.setAccessible(true);
+
+            return Optional.of(declaredField);
+        } catch(Exception ignored){}
+
+        return Optional.empty();
+    }
+
     @SuppressWarnings("unchecked")
     public static <T> Optional<T> getField(Object instance, Class<?> instanceClass, String fieldName) {
         try{
