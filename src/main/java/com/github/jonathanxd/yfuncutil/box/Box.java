@@ -25,16 +25,39 @@
  *      OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *      THE SOFTWARE.
  */
-package com.github.jonathanxd.spongeandbukkitbridge.api.events.init;
+package com.github.jonathanxd.yfuncutil.box;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.METHOD)
 /**
- * Called when IEventManager#Load fails.
+ * Created by jonathan on 23/03/16.
  */
-public @interface EnableFail {}
+public class Box<T> implements IBox<T> {
+    private final T value;
+    private boolean isValid = true;
+
+    public Box(T value) {
+        this.value = value;
+    }
+
+    @Override
+    public T getValue() throws UnsupportedOperationException {
+        checkValid();
+        return this.value;
+    }
+
+    @Override
+    public boolean isValid() {
+        return this.isValid;
+    }
+
+    @Override
+    public void invalidate() throws UnsupportedOperationException {
+        checkValid();
+        this.isValid = false;
+    }
+
+    private void checkValid() throws UnsupportedOperationException {
+        if (!this.isValid) {
+            throw new UnsupportedOperationException("Invalid Box, make sure the code has not any problems.");
+        }
+    }
+}

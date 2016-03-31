@@ -25,16 +25,28 @@
  *      OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *      THE SOFTWARE.
  */
-package com.github.jonathanxd.spongeandbukkitbridge.api.events.init;
+package com.github.jonathanxd.spongeandbukkitbridge.api.events;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import com.github.jonathanxd.spongeandbukkitbridge.utils.Holder;
 
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.METHOD)
 /**
- * Called when IEventManager#Load fails.
+ * Created by jonathan on 30/03/16.
  */
-public @interface EnableFail {}
+public abstract class AbstractCancellableEvent extends AbstractEvent implements Cancellable {
+
+    private boolean cancelled = false;
+
+    protected AbstractCancellableEvent(Holder holder) {
+        super(holder);
+    }
+
+    @Override
+    public boolean isCancelled() {
+        return this.cancelled;
+    }
+
+    @Override
+    public void setCancelled(boolean cancel) {
+        this.cancelled = cancel;
+    }
+}

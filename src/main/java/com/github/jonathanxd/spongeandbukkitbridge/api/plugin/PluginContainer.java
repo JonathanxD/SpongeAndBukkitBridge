@@ -35,15 +35,20 @@ import com.github.jonathanxd.spongeandbukkitbridge.plugin.PluginHolder;
 /**
  * Created by jonathan on 27/03/16.
  */
+
+/**
+ * PluginContainer is a Proxy to {@link PluginHolder} with different methods name.
+ * @param <T> Plugin Class Type
+ */
 public interface PluginContainer<T> {
 
-    @Intercept(ifClass = PluginHolder.class, method = "getPluginDataBuilder")
+    @Intercept(ifClass = "com.github.jonathanxd.spongeandbukkitbridge.plugin.PluginHolder", method = "getPluginDataBuilder")
     PluginDataBuilder getData();
 
-    @Intercept(ifClass = PluginHolder.class, method = "getPluginInstance")
+    @Intercept(ifClass = "com.github.jonathanxd.spongeandbukkitbridge.plugin.PluginHolder", method = "getPluginInstance")
     T getInstance();
 
-    @Intercept(ifClass = PluginHolder.class, method = "getLoggerSB")
+    @Intercept(ifClass = "com.github.jonathanxd.spongeandbukkitbridge.plugin.PluginHolder", method = "getLoggerSB")
     LoggerSB<?> getLogger();
 
 }

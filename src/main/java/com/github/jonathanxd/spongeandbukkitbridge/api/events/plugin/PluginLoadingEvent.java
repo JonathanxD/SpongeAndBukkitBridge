@@ -25,16 +25,44 @@
  *      OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *      THE SOFTWARE.
  */
-package com.github.jonathanxd.spongeandbukkitbridge.api.events.init;
+package com.github.jonathanxd.spongeandbukkitbridge.api.events.plugin;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import com.github.jonathanxd.spongeandbukkitbridge.api.plugin.PluginContainer;
 
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.METHOD)
+import java.io.File;
+import java.util.List;
+
 /**
- * Called when IEventManager#Load fails.
+ * Created by jonathan on 30/03/16.
  */
-public @interface EnableFail {}
+public class PluginLoadingEvent extends PluginEvent {
+
+    private final List<Class<?>> classes;
+    private final File directory;
+
+    public PluginLoadingEvent(PluginContainer<?> pluginContainer, List<Class<?>> classes, File directory) {
+        super(pluginContainer);
+        this.classes = classes;
+        this.directory = directory;
+
+        involved().add(pluginContainer, classes, directory);
+    }
+
+    /**
+     * Mutable list of plugin classes
+     *
+     * @return Mutable List of plugin classes
+     */
+    public List<Class<?>> getClasses() {
+        return classes;
+    }
+
+    /**
+     * Plugin directory
+     *
+     * @return Plugin directory
+     */
+    public File getDirectory() {
+        return directory;
+    }
+}

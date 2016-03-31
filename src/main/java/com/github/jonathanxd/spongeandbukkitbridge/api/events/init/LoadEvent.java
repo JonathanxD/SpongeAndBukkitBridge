@@ -35,6 +35,6 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 /**
- * Called before EventManager load.
+ * Called before IEventManager load.
  */
 public @interface LoadEvent {}

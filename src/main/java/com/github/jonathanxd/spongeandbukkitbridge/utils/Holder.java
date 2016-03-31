@@ -27,6 +27,8 @@
  */
 package com.github.jonathanxd.spongeandbukkitbridge.utils;
 
+import com.github.jonathanxd.spongeandbukkitbridge.api.events.Event;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -37,10 +39,45 @@ import java.util.Optional;
  */
 public class Holder {
 
-    private final List<?> values;
+    private final List<Object> values;
+    private final List<Holder> child = new ArrayList<>();
 
     public Holder(List<?> values) {
-        this.values = values;
+        this.values = new ArrayList<>(values);
+    }
+
+    public static Holder of(Object... values) {
+        return new Holder(new ArrayList<>(Arrays.asList(values)));
+    }
+
+    public static Holder extendToNew(Holder holderToExtend, List<Object> moreValues) {
+
+        List<Object> newList = new ArrayList<>(holderToExtend.values);
+        newList.addAll(moreValues);
+
+        return new Holder(newList);
+    }
+
+    public List<Holder> getChild() {
+        return child;
+    }
+
+    /**
+     * Child holders aren't passed to events as parameters, is only accessible via {@link #getChild()}
+     */
+    public void addChild(Holder holder) {
+        this.child.add(holder);
+    }
+
+    public void add(Object o) {
+        values.add(o);
+    }
+
+    public void add(Object... o) {
+        for(Object os : o) {
+            this.add(os);
+        }
+
     }
 
     @SuppressWarnings("unchecked")
@@ -50,8 +87,8 @@ public class Holder {
 
     @SuppressWarnings("unchecked")
     public Optional<Object> find(Class<?> clazz, int offset) {
-        for(int x = 0; x < values.size(); ++x) {
-            if(x < offset)
+        for (int x = 0; x < values.size(); ++x) {
+            if (x < offset)
                 continue;
 
             Object value = values.get(x);
@@ -61,7 +98,11 @@ public class Holder {
         return Optional.empty();
     }
 
-    public static Holder of(Object... values){
-        return new Holder(new ArrayList<>(Arrays.asList(values)));
+    public Holder extendToNew(Object... moreValues) {
+        return this.extendToNew(Arrays.asList(moreValues));
+    }
+
+    public Holder extendToNew(List<Object> moreValues) {
+        return Holder.extendToNew(this, moreValues);
     }
 }

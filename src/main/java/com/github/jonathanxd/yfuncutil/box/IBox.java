@@ -25,16 +25,41 @@
  *      OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *      THE SOFTWARE.
  */
-package com.github.jonathanxd.spongeandbukkitbridge.api.events.init;
+package com.github.jonathanxd.yfuncutil.box;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.METHOD)
 /**
- * Called when IEventManager#Load fails.
+ * Created by jonathan on 23/03/16.
  */
-public @interface EnableFail {}
+
+/**
+ * IBox is a lightweight version of {@link java.util.concurrent.atomic.AtomicReference}
+ *
+ * This class is not synchronized/thread-safe.
+ *
+ * This class holds a Object to be accessed later, from a lambda for example.
+ */
+public interface IBox<T> extends EmptyBox<T> {
+
+    /**
+     * Get current value
+     *
+     * @return Value Current Value
+     * @throws UnsupportedOperationException Will throw exception if this Box is not valid
+     */
+    T getValue() throws UnsupportedOperationException;
+
+
+    /**
+     * Return true if current value is not null
+     * @return true if current value is not null
+     */
+    default boolean notNull() {
+        return getValue() != null;
+    }
+
+    @Override
+    default T boxedValue() throws UnsupportedOperationException {
+        EmptyBox.checkValid(this);
+        return getValue();
+    }
+}

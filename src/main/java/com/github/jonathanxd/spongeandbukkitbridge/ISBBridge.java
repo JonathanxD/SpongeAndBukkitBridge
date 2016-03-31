@@ -25,16 +25,17 @@
  *      OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *      THE SOFTWARE.
  */
-package com.github.jonathanxd.spongeandbukkitbridge.api.events.init;
+package com.github.jonathanxd.spongeandbukkitbridge;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import com.github.jonathanxd.spongeandbukkitbridge.statics.Implementation;
 
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.METHOD)
 /**
- * Called when IEventManager#Load fails.
+ * Created by jonathan on 20/01/16.
  */
-public @interface EnableFail {}
+public interface ISBBridge {
+
+    default Implementation getAPIImpl() {
+        return SBBridge.getImplementation();
+    }
+
+}

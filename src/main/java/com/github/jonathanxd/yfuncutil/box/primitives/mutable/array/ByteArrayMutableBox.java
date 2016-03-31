@@ -25,16 +25,65 @@
  *      OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *      THE SOFTWARE.
  */
-package com.github.jonathanxd.spongeandbukkitbridge.api.events.init;
+package com.github.jonathanxd.yfuncutil.box.primitives.mutable.array;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import com.github.jonathanxd.yfuncutil.array.Primitives;
+import com.github.jonathanxd.yfuncutil.box.EmptyBox;
 
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.METHOD)
 /**
- * Called when IEventManager#Load fails.
+ * Created by jonathan on 23/03/16.
  */
-public @interface EnableFail {}
+
+/**
+ * Optimized to {@link byte} primitive.
+ */
+public class ByteArrayMutableBox implements EmptyBox<Byte[]> {
+
+    private byte[] value = new byte[0];
+    private boolean valid = true;
+
+    public ByteArrayMutableBox() {
+    }
+
+    public ByteArrayMutableBox(byte[] value) {
+        this.value = value;
+    }
+
+    /**
+     * Get current box value
+     *
+     * @return Value to get from box
+     */
+    public byte[] getValue() {
+        EmptyBox.checkValid(this);
+
+        return this.value;
+    }
+
+    /**
+     * Set box value
+     *
+     * @param value Value to set to box
+     */
+    public void setValue(byte[] value) {
+        EmptyBox.checkValid(this);
+
+        this.value = value;
+    }
+
+    @Override
+    public Byte[] boxedValue() throws UnsupportedOperationException {
+        return Primitives.fromPrimitive(getValue());
+    }
+
+    @Override
+    public boolean isValid() {
+        return this.valid;
+    }
+
+    @Override
+    public void invalidate() throws UnsupportedOperationException {
+        EmptyBox.checkValid(this);
+        this.valid = false;
+    }
+}

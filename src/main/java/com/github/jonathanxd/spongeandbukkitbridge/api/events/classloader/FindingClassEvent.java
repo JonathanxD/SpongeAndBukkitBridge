@@ -25,16 +25,31 @@
  *      OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *      THE SOFTWARE.
  */
-package com.github.jonathanxd.spongeandbukkitbridge.api.events.init;
+package com.github.jonathanxd.spongeandbukkitbridge.api.events.classloader;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import com.github.jonathanxd.spongeandbukkitbridge.api.events.AbstractCancellableEvent;
+import com.github.jonathanxd.spongeandbukkitbridge.plugin.PluginClassLoader;
+import com.github.jonathanxd.spongeandbukkitbridge.utils.Holder;
 
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.METHOD)
 /**
- * Called when IEventManager#Load fails.
+ * Created by jonathan on 30/03/16.
  */
-public @interface EnableFail {}
+public class FindingClassEvent extends AbstractCancellableEvent {
+
+    private final String name;
+    private final PluginClassLoader pluginClassLoader;
+
+    public FindingClassEvent(String name, PluginClassLoader pluginClassLoader) {
+        super(Holder.of(name, pluginClassLoader));
+        this.name = name;
+        this.pluginClassLoader = pluginClassLoader;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public PluginClassLoader getPluginClassLoader() {
+        return pluginClassLoader;
+    }
+}

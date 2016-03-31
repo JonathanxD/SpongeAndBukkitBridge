@@ -27,6 +27,8 @@
  */
 package com.github.jonathanxd.spongeandbukkitbridge.implementation.bukkit.impl;
 
+import com.github.jonathanxd.spongeandbukkitbridge.api.ievents.AbstractIIEventManager;
+import com.github.jonathanxd.spongeandbukkitbridge.api.ievents.IEventManager;
 import com.github.jonathanxd.spongeandbukkitbridge.api.logging.LoggerSB;
 
 import org.bukkit.Bukkit;
@@ -47,6 +49,7 @@ import com.github.jonathanxd.spongeandbukkitbridge.statics.AbstractImplementatio
 public class BukkitImplementation extends AbstractImplementation {
     private static final LoggerSB logger = new LoggerSBImpl();
     private static final EventManagerSB manager = new EventManagerSBImpl();
+    private static final IEventManager imanager = new AbstractIIEventManager() {};
 
     @Override
     public String getName() {
@@ -88,5 +91,10 @@ public class BukkitImplementation extends AbstractImplementation {
     @Override
     public EventManagerSB getEventManager() {
         return manager;
+    }
+
+    @Override
+    public IEventManager getIEventManager() {
+        return imanager;
     }
 }

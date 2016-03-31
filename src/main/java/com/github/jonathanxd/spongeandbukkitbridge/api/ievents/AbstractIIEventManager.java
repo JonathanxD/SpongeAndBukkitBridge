@@ -25,16 +25,49 @@
  *      OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *      THE SOFTWARE.
  */
-package com.github.jonathanxd.spongeandbukkitbridge.api.events.init;
+package com.github.jonathanxd.spongeandbukkitbridge.api.ievents;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.METHOD)
 /**
- * Called when IEventManager#Load fails.
+ * Created by jonathan on 30/03/16.
  */
-public @interface EnableFail {}
+public abstract class AbstractIIEventManager implements IEventManager {
+    private final Map<Class<? extends IEvent>, Set<IListener<? extends IEvent>>> listeners = new HashMap<>();
+
+    @Override
+    public <E extends IEvent, T extends IListener<E>> void register(Class<E> eventClass, T listener) {
+        add(eventClass, listener);
+    }
+
+    @SuppressWarnings("unchecked")
+    private void add(Class<? extends IEvent> clazz, IListener<? extends IEvent> listener) {
+        if (!listeners.containsKey(clazz)) {
+            listeners.put(clazz, new HashSet<>());
+        }
+
+        listeners.get(clazz).add(listener);
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public <E extends IEvent> E call(E event) {
+
+        listeners.forEach((k, v) -> {
+            if(k.isAssignableFrom(event.getClass())) {
+                for(IListener<? extends  IEvent> listener : v) {
+                    help((IListener<E>) listener, event);
+                }
+            }
+        });
+
+        return event;
+    }
+
+    private <E extends IEvent> void help(IListener<E> listener, E event) {
+        listener.onEvent(event);
+    }
+}

@@ -25,44 +25,15 @@
  *      OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *      THE SOFTWARE.
  */
-package com.github.jonathanxd.spongeandbukkitbridge;
+package com.github.jonathanxd.spongeandbukkitbridge.api.ievents;
 
+/**
+ * Created by jonathan on 30/03/16.
+ */
+public interface IEventManager {
 
-import com.github.jonathanxd.spongeandbukkitbridge.plugin.PluginLoader;
-import com.github.jonathanxd.spongeandbukkitbridge.statics.Implementation;
-import com.github.jonathanxd.spongeandbukkitbridge.utils.Reflection;
+    <E extends IEvent, T extends IListener<E>> void register(Class<E> eventClass, T listener);
 
-import java.io.File;
+    <E extends IEvent> E call(E event);
 
-public class ConvergSB implements IConvergSB {
-
-    private static final Implementation implementation = null;
-    private static final PluginLoader loader = null;
-
-    @SuppressWarnings("ConstantConditions")
-    public void init(Implementation implementation) throws IllegalStateException {
-        if(ConvergSB.implementation == null && ConvergSB.loader == null){
-            Reflection.setField(null, ConvergSB.class, "implementation", implementation);
-            Reflection.setField(null, ConvergSB.class, "loader", new PluginLoader(implementation));
-        }else{
-            throw new IllegalStateException("Already initialized!");
-        }
-
-        initConvergPlugins(implementation.getPluginsFolder());
-    }
-
-    private void initConvergPlugins(File pluginsFolder) {
-        File[] files = pluginsFolder.listFiles();
-        if(files != null) {
-            for(File file : files) {
-                if(file.getName().endsWith(".jar")) {
-                    loader.load(file);
-                }
-            }
-        }
-    }
-
-    public static Implementation getImplementation() {
-        return ConvergSB.implementation;
-    }
 }

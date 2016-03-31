@@ -25,16 +25,27 @@
  *      OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *      THE SOFTWARE.
  */
-package com.github.jonathanxd.spongeandbukkitbridge.api.events.init;
+package com.github.jonathanxd.spongeandbukkitbridge;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import com.github.jonathanxd.spongeandbukkitbridge.api.ievents.IListener;
+import com.github.jonathanxd.spongeandbukkitbridge.api.ievents.loader.ClassLoadEvent;
+import com.github.jonathanxd.spongeandbukkitbridge.statics.Implementation;
 
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.METHOD)
 /**
- * Called when IEventManager#Load fails.
+ * Created by jonathan on 30/03/16.
  */
-public @interface EnableFail {}
+public class SBListener extends IListener<ClassLoadEvent> {
+
+    private final Implementation implementation;
+
+    public SBListener(Implementation implementation) {
+        this.implementation = implementation;
+    }
+
+    @Override
+    public void onEvent(ClassLoadEvent event) {
+        if (event.getName().startsWith("org.bukkit") || event.getName().startsWith("org.spigot") || event.getName().startsWith("org.spongepowered")) {
+            implementation.getLogger().warning("Warning, plugin file '" + event.getPluginClassLoader().getPluginFile() + "' is using multi-platform incompatible classes.");
+        }
+    }
+}

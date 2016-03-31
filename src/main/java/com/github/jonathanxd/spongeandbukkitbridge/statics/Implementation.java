@@ -28,6 +28,8 @@
 package com.github.jonathanxd.spongeandbukkitbridge.statics;
 
 import com.github.jonathanxd.spongeandbukkitbridge.api.events.manager.EventManagerSB;
+import com.github.jonathanxd.spongeandbukkitbridge.api.ievents.AbstractIIEventManager;
+import com.github.jonathanxd.spongeandbukkitbridge.api.ievents.IEventManager;
 import com.github.jonathanxd.spongeandbukkitbridge.api.logging.LoggerSB;
 import com.github.jonathanxd.spongeandbukkitbridge.api.plugin.PluginContainer;
 import com.github.jonathanxd.spongeandbukkitbridge.plugin.PluginHolder;
@@ -98,11 +100,13 @@ public interface Implementation {
     Optional<LoggerSB<?>> getLoggerFor(Object plugin);
 
     /**
-     * Get EventManager
+     * Get IEventManager
      *
-     * @return EventManager
+     * @return IEventManager
      */
     EventManagerSB getEventManager();
+
+    IEventManager getIEventManager();
 
     Optional<PluginContainer<?>> getPlugin(Object instance);
 

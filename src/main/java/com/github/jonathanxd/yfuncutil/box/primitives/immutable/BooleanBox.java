@@ -25,16 +25,64 @@
  *      OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *      THE SOFTWARE.
  */
-package com.github.jonathanxd.spongeandbukkitbridge.api.events.init;
+package com.github.jonathanxd.yfuncutil.box.primitives.immutable;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import com.github.jonathanxd.yfuncutil.box.EmptyBox;
 
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.METHOD)
 /**
- * Called when IEventManager#Load fails.
+ * Created by jonathan on 23/03/16.
  */
-public @interface EnableFail {}
+
+/**
+ * Optimized to {@link boolean} primitive.
+ */
+public class BooleanBox implements EmptyBox<Boolean> {
+
+    private final boolean value;
+    private boolean valid = true;
+
+    public BooleanBox() {
+        this(false);
+    }
+
+    public BooleanBox(boolean state) {
+        this.value = state;
+    }
+
+    /**
+     * Get current box value
+     *
+     * @return Value to get from box
+     */
+    public boolean getValue() {
+        EmptyBox.checkValid(this);
+
+        return value;
+    }
+
+    /**
+     * Toggle boolean and return new box
+     * @return new box
+     */
+    public BooleanBox toggle() {
+        return new BooleanBox(!this.getValue());
+    }
+
+    @Override
+    public Boolean boxedValue() throws UnsupportedOperationException {
+        EmptyBox.checkValid(this);
+
+        return value;
+    }
+
+    @Override
+    public boolean isValid() {
+        return this.valid;
+    }
+
+    @Override
+    public void invalidate() throws UnsupportedOperationException {
+        EmptyBox.checkValid(this);
+        this.valid = false;
+    }
+}

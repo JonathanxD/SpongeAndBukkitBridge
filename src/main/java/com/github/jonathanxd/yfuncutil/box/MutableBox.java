@@ -25,17 +25,44 @@
  *      OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *      THE SOFTWARE.
  */
-package com.github.jonathanxd.spongeandbukkitbridge;
-
-import com.github.jonathanxd.spongeandbukkitbridge.statics.Implementation;
+package com.github.jonathanxd.yfuncutil.box;
 
 /**
- * Created by jonathan on 20/01/16.
+ * Created by jonathan on 23/03/16.
  */
-public interface IConvergSB {
+public class MutableBox<T> implements IMutableBox<T> {
+    private T value;
+    private boolean isValid = true;
 
-    default Implementation getAPIImpl() {
-        return ConvergSB.getImplementation();
+    public MutableBox() {
+        this(null);
+    }
+
+    public MutableBox(T value) {
+        this.value = value;
+    }
+
+    @Override
+    public T getValue() throws UnsupportedOperationException {
+        EmptyBox.checkValid(this);
+        return this.value;
+    }
+
+    @Override
+    public void setValue(T value) throws UnsupportedOperationException {
+        EmptyBox.checkValid(this);
+        this.value = value;
+    }
+
+    @Override
+    public boolean isValid() {
+        return this.isValid;
+    }
+
+    @Override
+    public void invalidate() throws UnsupportedOperationException {
+        EmptyBox.checkValid(this);
+        this.isValid = false;
     }
 
 }

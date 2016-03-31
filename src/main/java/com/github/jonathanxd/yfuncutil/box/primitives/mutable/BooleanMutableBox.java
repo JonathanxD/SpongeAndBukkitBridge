@@ -25,16 +25,78 @@
  *      OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *      THE SOFTWARE.
  */
-package com.github.jonathanxd.spongeandbukkitbridge.api.events.init;
+package com.github.jonathanxd.yfuncutil.box.primitives.mutable;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import com.github.jonathanxd.yfuncutil.box.EmptyBox;
 
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.METHOD)
 /**
- * Called when IEventManager#Load fails.
+ * Created by jonathan on 23/03/16.
  */
-public @interface EnableFail {}
+
+/**
+ * Optimized to {@link boolean} primitive.
+ */
+public class BooleanMutableBox implements EmptyBox<Boolean> {
+
+    private boolean value = false;
+    private boolean valid = true;
+
+    public BooleanMutableBox() {
+    }
+
+    public BooleanMutableBox(boolean state) {
+        this.value = state;
+    }
+
+    /**
+     * Get current box value
+     *
+     * @return Value to get from box
+     */
+    public boolean getValue() {
+        EmptyBox.checkValid(this);
+
+        return value;
+    }
+
+    /**
+     * Set box value
+     *
+     * @param state Value to set to box
+     */
+    public void setValue(boolean state) {
+        EmptyBox.checkValid(this);
+
+        this.value = state;
+    }
+
+    /**
+     * Toggle boolean and return old value
+     * @return Old boolean value
+     */
+    public boolean toggle() {
+        boolean current = this.getValue();
+
+        this.setValue(!current);
+
+        return current;
+    }
+
+    @Override
+    public Boolean boxedValue() throws UnsupportedOperationException {
+        EmptyBox.checkValid(this);
+
+        return value;
+    }
+
+    @Override
+    public boolean isValid() {
+        return this.valid;
+    }
+
+    @Override
+    public void invalidate() throws UnsupportedOperationException {
+        EmptyBox.checkValid(this);
+        this.valid = false;
+    }
+}

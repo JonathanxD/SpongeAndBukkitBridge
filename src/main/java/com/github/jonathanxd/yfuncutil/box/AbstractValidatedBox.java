@@ -25,16 +25,46 @@
  *      OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *      THE SOFTWARE.
  */
-package com.github.jonathanxd.spongeandbukkitbridge.api.events.init;
+package com.github.jonathanxd.yfuncutil.box;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import com.github.jonathanxd.yfuncutil.box.primitives.toboxed.ToBoxed;
+import com.github.jonathanxd.yfuncutil.optional.Option;
+import com.github.jonathanxd.yfuncutil.reflection.MethodFinder;
+import com.github.jonathanxd.yfuncutil.reflection.MethodSpec;
 
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.METHOD)
+import java.lang.reflect.Method;
+import java.util.Optional;
+
 /**
- * Called when IEventManager#Load fails.
+ * Created by jonathan on 23/03/16.
  */
-public @interface EnableFail {}
+public class AbstractValidatedBox<T> implements EmptyBox<T> {
+
+    private boolean isValid = true;
+
+    @Override
+    public boolean isValid() {
+        return this.isValid;
+    }
+
+    @Override
+    public void invalidate() throws UnsupportedOperationException {
+        EmptyBox.checkValid(this);
+        this.isValid = false;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public T boxedValue() throws UnsupportedOperationException {
+        Optional<Object> opt = Option.ifPresent(
+                MethodFinder.find(new MethodSpec(ToBoxed.class), this.getClass(), false),
+                (Method e) -> MethodFinder.callIgnoringException(this, e))
+                .resultOrElse(v -> {throw new UnsupportedOperationException("boxedValue");});
+
+        if (opt.isPresent()) {
+            return (T) opt.get();
+        }
+
+        throw new UnsupportedOperationException("boxedValue");
+    }
+}

@@ -25,16 +25,29 @@
  *      OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *      THE SOFTWARE.
  */
-package com.github.jonathanxd.spongeandbukkitbridge.api.events.init;
+package com.github.jonathanxd.yfuncutil.reflection;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.METHOD)
 /**
- * Called when IEventManager#Load fails.
+ * Created by jonathan on 23/03/16.
  */
-public @interface EnableFail {}
+public enum Modifier {
+
+    PUBLIC(java.lang.reflect.Modifier.PUBLIC), PRIVATE(java.lang.reflect.Modifier.PRIVATE), PROTECTED(java.lang.reflect.Modifier.PROTECTED),
+    STATIC(java.lang.reflect.Modifier.STATIC), FINAL(java.lang.reflect.Modifier.FINAL), SYNCHRONIZED(java.lang.reflect.Modifier.SYNCHRONIZED),
+    VOLATILE(java.lang.reflect.Modifier.VOLATILE), TRANSIENT(java.lang.reflect.Modifier.TRANSIENT), NATIVE(java.lang.reflect.Modifier.NATIVE),
+    INTERFACE(java.lang.reflect.Modifier.INTERFACE), ABSTRACT(java.lang.reflect.Modifier.ABSTRACT), STRICT(java.lang.reflect.Modifier.STRICT);
+
+    private final int modifier;
+
+    Modifier(int modifier) {
+        this.modifier = modifier;
+    }
+
+    public int getModifier() {
+        return modifier;
+    }
+
+    public boolean test(int mod) {
+        return (mod & this.getModifier()) != 0;
+    }
+}

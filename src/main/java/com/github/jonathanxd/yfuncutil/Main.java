@@ -25,16 +25,47 @@
  *      OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *      THE SOFTWARE.
  */
-package com.github.jonathanxd.spongeandbukkitbridge.api.events.init;
+package com.github.jonathanxd.yfuncutil;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import com.github.jonathanxd.yfuncutil.box.IBox;
+import com.github.jonathanxd.yfuncutil.box.primitives.mutable.LongMutableBox;
+import com.github.jonathanxd.yfuncutil.iterate.LoopState;
+import com.github.jonathanxd.yfuncutil.stream.iterate.ForEach;
 
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.METHOD)
-/**
- * Called when IEventManager#Load fails.
- */
-public @interface EnableFail {}
+import java.util.ArrayList;
+import java.util.List;
+
+public class Main {
+
+    public static void main(String[] args) {
+        List<String> strings = new ArrayList<>();
+
+        strings.add("Bkp");
+        strings.add("0090");
+        strings.add("S0P3R 0N3");
+        for(int x = 0; x < 500; ++x) {
+            strings.add("S0P3R 0N3 & "+(x*2));
+        }
+
+        IBox<String> stringBox = ForEach.breakableForEach(strings.stream(), (s, index) -> index == 9 ? LoopState.BREAK : LoopState.DEFAULT);
+
+        System.out.println("String box: "+stringBox.getValue());
+
+        LongMutableBox longMutableBox = new LongMutableBox(9);
+
+        Long boxed = longMutableBox.boxedValue();
+
+        System.out.println("Boxed! "+boxed);
+    }
+
+
+    public static Byte[] toBoxed(byte[] bytes) {
+        Byte[] bytes1 = new Byte[bytes.length];
+
+        for (int x = 0; x < bytes.length; ++x) {
+            bytes1[x] = bytes[x];
+        }
+
+        return bytes1;
+    }
+}

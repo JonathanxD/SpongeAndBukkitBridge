@@ -27,26 +27,33 @@
  */
 package com.github.jonathanxd.spongeandbukkitbridge.plugin;
 
+import com.github.jonathanxd.spongeandbukkitbridge.api.events.classloader.ByteClassEvent;
+import com.github.jonathanxd.spongeandbukkitbridge.api.events.classloader.LoadingClassEvent;
+import com.github.jonathanxd.spongeandbukkitbridge.api.events.init.EnableEvent;
+import com.github.jonathanxd.spongeandbukkitbridge.api.events.init.EnableFail;
+import com.github.jonathanxd.spongeandbukkitbridge.api.events.init.LoadEvent;
+import com.github.jonathanxd.spongeandbukkitbridge.api.logging.LoggerSB;
+import com.github.jonathanxd.spongeandbukkitbridge.api.plugin.Plugin;
+import com.github.jonathanxd.spongeandbukkitbridge.exceptions.PluginLoadException;
+import com.github.jonathanxd.spongeandbukkitbridge.statics.Implementation;
+import com.github.jonathanxd.spongeandbukkitbridge.utils.Reflection;
+import com.github.jonathanxd.yfuncutil.box.primitives.mutable.array.ByteArrayMutableBox;
+
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
-import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
-import com.github.jonathanxd.spongeandbukkitbridge.api.events.init.EnableEvent;
-import com.github.jonathanxd.spongeandbukkitbridge.api.events.init.EnableFail;
-import com.github.jonathanxd.spongeandbukkitbridge.api.events.init.LoadEvent;
-import com.github.jonathanxd.spongeandbukkitbridge.api.logging.LoggerSB;
-import com.github.jonathanxd.spongeandbukkitbridge.api.plugin.Plugin;
-import com.github.jonathanxd.spongeandbukkitbridge.statics.Implementation;
-import com.github.jonathanxd.spongeandbukkitbridge.utils.Reflection;
-
 /**
  * Created by jonathan on 20/01/16.
  */
+
 /**
  * TODO: Rewrite
  */
@@ -60,20 +67,32 @@ public class PluginLoader {
         this.logger = implementation.getLogger();
     }
 
+    private static byte[] getBytes(InputStream is) throws IOException {
+        try (ByteArrayOutputStream os = new ByteArrayOutputStream()) {
+
+            byte[] buffer = new byte[0xFFFF];
+
+            for (int len; (len = is.read(buffer)) != -1; )
+                os.write(buffer, 0, len);
+
+            os.flush();
+            return os.toByteArray();
+        }
+    }
+
     public List<Object> load(File fileToLoad) {
         List<Object> mainClasses = new ArrayList<>();
         List<Class<?>> classes = new ArrayList<>();
+
         try {
-            boolean yaml = false;
+
             JarFile jarFile = new JarFile(fileToLoad);
             Enumeration<?> e = jarFile.entries();
 
             URL[] urls = {new URL("jar:file:" + fileToLoad + "!/")};
-            //URLClassLoader cl = URLClassLoader.newInstance(urls);
-            URLClassLoader cl = new URLClassLoader(urls, this.getClass().getClassLoader());
 
+            PluginClassLoader cl = new PluginClassLoader(urls, this.getClass().getClassLoader(), fileToLoad, implementation);
 
-            logger.info("Found jar file: %s", fileToLoad);
             while (e.hasMoreElements()) {
                 JarEntry je = (JarEntry) e.nextElement();
 
@@ -84,7 +103,25 @@ public class PluginLoader {
                 String className = je.getName().substring(0, je.getName().length() - 6);
                 className = className.replace('/', '.');
                 try {
-                    Class<?> c = Class.forName(className, true, cl);
+
+                    LoadingClassEvent event = new LoadingClassEvent(className, cl);
+                    implementation.getEventManager().callEvent(event);
+
+                    if (event.isCancelled())
+                        continue;
+
+                    jarFile.getInputStream(je);
+
+                    byte[] bytes = getBytes(jarFile.getInputStream(je));
+
+                    ByteClassEvent byteClassEvent = new ByteClassEvent(className, new ByteArrayMutableBox(bytes), cl);
+
+                    implementation.getEventManager().callEvent(byteClassEvent);
+
+                    bytes = byteClassEvent.getBytes().getValue();
+
+                    //Class<?> c = Class.forName(className, true, cl);
+                    Class<?> c = cl.defineClass(className, bytes);
                     classes.add(c);
                 } catch (Throwable e2) {
                     //System.err.println("=== Error, dependencies in "+f.getName()+" class: "+className+" error: "+e2.getMessage());
@@ -92,19 +129,15 @@ public class PluginLoader {
                 }
 
             }
-            logger.info("Found %d classes!", classes.size());
-            logger.info("== %s ==!", classes);
 
             for (Class<?> xc : classes) {
 
-                /*logger.info("Loader: %s", xc.getClassLoader().getClass());
-                logger.info("+ %s +", xc.toString());
-                logger.info("Annotations: " + Arrays.asList(xc.getDeclaredAnnotations()));
-                logger.info("Annotations +: " + Arrays.asList(xc.getAnnotations()));*/
                 if (xc.isAnnotationPresent(Plugin.class)) {
                     final Plugin annotation = xc.getAnnotation(Plugin.class);
                     PluginDataBuilder pluginData = PluginDataBuilder.fromAnnotation(xc, annotation);
+
                     logger.info("Trying to load plugin '%s'", pluginData.getName());
+
                     Object instance = xc.newInstance();
                     mainClasses.add(instance);
 
@@ -115,9 +148,9 @@ public class PluginLoader {
                     Reflection.invoke(instance, LoadEvent.class);
 
 
-                    if(implementation.loadPlugin(pluginHolder)){
+                    if (implementation.loadPlugin(pluginHolder)) {
                         Reflection.invoke(instance, EnableEvent.class);
-                    }else{
+                    } else {
                         Reflection.invoke(instance, EnableFail.class);
                     }
                 }
@@ -126,6 +159,10 @@ public class PluginLoader {
             jarFile.close();
         } catch (Exception e) {
             e.printStackTrace();
+        }
+
+        if(mainClasses.isEmpty()) {
+            throw new PluginLoadException("Cannot find main class in file '"+fileToLoad+"'");
         }
 
         return mainClasses;

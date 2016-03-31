@@ -46,7 +46,7 @@ public class PluginHolder<T> {
     public PluginHolder(PluginDataBuilder pluginDataBuilder, T pluginInstance) {
         this.pluginDataBuilder = pluginDataBuilder;
         this.pluginInstance = pluginInstance;
-        pluginContainer = (PluginContainer<T>) Interceptor.builder(null, this, new Class<?>[]{PluginContainer.class}).buildProxy().getProxy();
+        pluginContainer = (PluginContainer<T>) Interceptor.builder(null, this, new Class<?>[]{PluginContainer.class}).buildProxy().useCache().getProxy();
     }
 
     public PluginDataBuilder getPluginDataBuilder() {

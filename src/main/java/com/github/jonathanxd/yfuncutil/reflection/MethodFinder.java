@@ -25,16 +25,51 @@
  *      OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *      THE SOFTWARE.
  */
-package com.github.jonathanxd.spongeandbukkitbridge.api.events.init;
+package com.github.jonathanxd.yfuncutil.reflection;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import com.github.jonathanxd.yfuncutil.optional.Option;
 
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.METHOD)
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.Objects;
+import java.util.Optional;
+
 /**
- * Called when IEventManager#Load fails.
+ * Created by jonathan on 23/03/16.
  */
-public @interface EnableFail {}
+public class MethodFinder {
+
+    /**
+     * Find method in a class
+     * @param methodSpec Method specification
+     * @param clazz Class to find method
+     * @param analiseSuper Analise super methods
+     * @return Method or empty Optional
+     */
+    public static Optional<Method> find(MethodSpec methodSpec, Class<?> clazz, boolean analiseSuper) {
+        return Option.orElseAnd(
+                find(methodSpec, clazz.getDeclaredMethods()),
+                /* not present and */ analiseSuper,
+                /* then */ find(methodSpec, clazz.getMethods()));
+    }
+
+
+    private static Optional<Method> find(MethodSpec methodSpec, Method[] methods) {
+        for(Method m : methods) {
+            if(methodSpec.matches(m)) {
+                return Optional.of(m);
+            }
+        }
+        return Optional.empty();
+    }
+
+
+    public static Object callIgnoringException(Object o, Method m, Object... args) {
+        try {
+            return Objects.requireNonNull(m)
+                    .invoke(Objects.requireNonNull(o), Objects.requireNonNull(args));
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            return null;
+        }
+    }
+}

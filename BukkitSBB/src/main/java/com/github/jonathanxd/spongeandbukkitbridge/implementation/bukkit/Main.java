@@ -32,7 +32,7 @@ import com.github.jonathanxd.spongeandbukkitbridge.implementation.bukkit.impl.Bu
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import com.github.jonathanxd.spongeandbukkitbridge.ConvergSB;
+import com.github.jonathanxd.spongeandbukkitbridge.SBBridge;
 import com.github.jonathanxd.spongeandbukkitbridge.implementation.bukkit.listener.AllListener;
 import com.github.jonathanxd.spongeandbukkitbridge.statics.Implementation;
 
@@ -49,8 +49,8 @@ public class Main extends JavaPlugin {
     @Override
     public void onEnable() {
         getServer().getPluginManager().registerEvents(new AllListener(this), this);
-        ConvergSB convergSB = new ConvergSB();
-        convergSB.init(implementation);
+        SBBridge SBBridge = new SBBridge();
+        SBBridge.init(implementation);
     }
 
     public static Plugin getBase() {

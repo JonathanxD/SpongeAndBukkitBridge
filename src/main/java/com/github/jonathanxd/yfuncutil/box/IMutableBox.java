@@ -25,16 +25,27 @@
  *      OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *      THE SOFTWARE.
  */
-package com.github.jonathanxd.spongeandbukkitbridge.api.events.init;
+package com.github.jonathanxd.yfuncutil.box;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.METHOD)
 /**
- * Called when IEventManager#Load fails.
+ * Created by jonathan on 23/03/16.
  */
-public @interface EnableFail {}
+
+/**
+ * IMutableBox is similar to {@link IBox}, but using this class you can change the object!
+ *
+ * This class is not synchronized/thread-safe
+ */
+public interface IMutableBox<T> extends IBox<T> {
+
+    /**
+     * Set current value of the {@link IMutableBox}.
+     *
+     * @param value New value to set
+     * @throws UnsupportedOperationException If the box is not valid!
+     * @see IBox#invalidate()
+     * @see IBox
+     */
+    void setValue(T value) throws UnsupportedOperationException;
+
+}

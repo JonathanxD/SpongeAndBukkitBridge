@@ -28,6 +28,8 @@
 package com.github.jonathanxd.spongeandbukkitbridge.implementation.sponge.impl;
 
 import com.github.jonathanxd.spongeandbukkitbridge.api.events.manager.EventManagerSB;
+import com.github.jonathanxd.spongeandbukkitbridge.api.ievents.AbstractIIEventManager;
+import com.github.jonathanxd.spongeandbukkitbridge.api.ievents.IEventManager;
 import com.github.jonathanxd.spongeandbukkitbridge.api.logging.LoggerSB;
 import com.github.jonathanxd.spongeandbukkitbridge.implementation.sponge.impl.event.EventManagerSBImpl;
 import com.github.jonathanxd.spongeandbukkitbridge.implementation.sponge.impl.logger.LoggerSBImpl;
@@ -48,6 +50,7 @@ public class SpongeImplementation extends AbstractImplementation {
     private static final String SPONGE_TARGET_VERSION = "4.0.3";
     private static final String MC_TARGET_VERSION = "1.8.9";
     private static final EventManagerSB manager = new EventManagerSBImpl();
+    private static final IEventManager imanager = new AbstractIIEventManager() {};
     private final LoggerSB loggerSB;
     private final Game game;
     private final Logger logger;
@@ -100,6 +103,11 @@ public class SpongeImplementation extends AbstractImplementation {
     @Override
     public EventManagerSB getEventManager() {
         return manager;
+    }
+
+    @Override
+    public IEventManager getIEventManager() {
+        return imanager;
     }
 
 }

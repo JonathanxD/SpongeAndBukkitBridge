@@ -37,7 +37,7 @@ import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.game.state.GameInitializationEvent;
 import org.spongepowered.api.plugin.Plugin;
 
-import com.github.jonathanxd.spongeandbukkitbridge.ConvergSB;
+import com.github.jonathanxd.spongeandbukkitbridge.SBBridge;
 import com.github.jonathanxd.spongeandbukkitbridge.implementation.sponge.sponge.EventListener;
 import com.github.jonathanxd.spongeandbukkitbridge.statics.Implementation;
 
@@ -63,7 +63,7 @@ public class Sponge {
 
         game.getEventManager().registerListeners(this, new EventListener(implementation));
 
-        ConvergSB convergSB = new ConvergSB();
-        convergSB.init(implementation);
+        SBBridge SBBridge = new SBBridge();
+        SBBridge.init(implementation);
     }
 }

@@ -25,16 +25,49 @@
  *      OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *      THE SOFTWARE.
  */
-package com.github.jonathanxd.spongeandbukkitbridge.api.events.init;
+package com.github.jonathanxd.spongeandbukkitbridge.api.ievents.loader;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import com.github.jonathanxd.spongeandbukkitbridge.api.ievents.Cancellable;
+import com.github.jonathanxd.spongeandbukkitbridge.api.ievents.IEvent;
+import com.github.jonathanxd.spongeandbukkitbridge.plugin.PluginClassLoader;
+import com.github.jonathanxd.spongeandbukkitbridge.utils.Holder;
 
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.METHOD)
 /**
- * Called when IEventManager#Load fails.
+ * Created by jonathan on 30/03/16.
  */
-public @interface EnableFail {}
+public class ClassLoadEvent implements IEvent, Cancellable {
+
+    private boolean cancelled;
+    private final String name;
+    private final PluginClassLoader pluginClassLoader;
+    private final Holder involved;
+
+    public ClassLoadEvent(String name, PluginClassLoader pluginClassLoader) {
+        this.name = name;
+        this.pluginClassLoader = pluginClassLoader;
+        this.involved = Holder.of(name, pluginClassLoader);
+    }
+
+    public PluginClassLoader getPluginClassLoader() {
+        return pluginClassLoader;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public boolean isCancelled() {
+        return cancelled;
+    }
+
+    @Override
+    public void setCancelled(boolean cancel) {
+        this.cancelled = cancel;
+    }
+
+    @Override
+    public Holder involved() {
+        return involved;
+    }
+}
