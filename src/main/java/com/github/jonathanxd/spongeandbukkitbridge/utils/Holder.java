@@ -80,6 +80,17 @@ public class Holder {
 
     }
 
+    public void remove(Object o) {
+        values.remove(o);
+    }
+
+    public void remove(Object... o) {
+        for (Object o1 : o) {
+            values.remove(o1);
+        }
+    }
+
+
     @SuppressWarnings("unchecked")
     public Optional<Object> find(Class<?> clazz) {
         return find(clazz, 0);
@@ -98,11 +109,36 @@ public class Holder {
         return Optional.empty();
     }
 
+    public Optional<Object> findAndRemove(Class<?> clazz) {
+        return find(clazz, 0);
+    }
+
+    @SuppressWarnings("unchecked")
+    public Optional<Object> findAndRemove(Class<?> clazz, int offset) {
+        for (int x = 0; x < values.size(); ++x) {
+            if (x < offset)
+                continue;
+
+            Object value = values.get(x);
+            if (clazz.isAssignableFrom(value.getClass())) {
+                values.remove(x);
+                return Optional.of(value);
+            }
+        }
+        return Optional.empty();
+    }
+
+
     public Holder extendToNew(Object... moreValues) {
         return this.extendToNew(Arrays.asList(moreValues));
     }
 
     public Holder extendToNew(List<Object> moreValues) {
         return Holder.extendToNew(this, moreValues);
+    }
+
+    @Override
+    public Holder clone() {
+        return new Holder(new ArrayList<>(this.values));
     }
 }

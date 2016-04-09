@@ -31,9 +31,9 @@ package com.github.jonathanxd.spongeandbukkitbridge.api.events.priority;
  * Created by jonathan on 20/01/16.
  */
 public enum Priority {
-    LOWEST,
-    LOW,
-    NORMAL,
+    HIGHEST,
     HIGH,
-    HIGHEST;
+    NORMAL,
+    LOW,
+    LOWEST;
 }

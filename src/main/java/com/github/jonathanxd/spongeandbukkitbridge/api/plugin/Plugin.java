@@ -38,5 +38,5 @@ public @interface Plugin {
     String name();
     String id();
     String version();
-    String[] dependencies() default "";
+    Dependency[] dependencies() default {};
 }

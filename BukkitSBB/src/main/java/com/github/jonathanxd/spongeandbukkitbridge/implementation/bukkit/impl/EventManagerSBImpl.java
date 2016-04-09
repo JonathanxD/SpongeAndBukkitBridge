@@ -27,32 +27,16 @@
  */
 package com.github.jonathanxd.spongeandbukkitbridge.implementation.bukkit.impl;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
-
-import com.github.jonathanxd.spongeandbukkitbridge.api.events.Event;
-import com.github.jonathanxd.spongeandbukkitbridge.api.events.manager.EventManagerSB;
-import com.github.jonathanxd.spongeandbukkitbridge.api.events.ListenerData;
+import com.github.jonathanxd.spongeandbukkitbridge.api.events.manager.AbstractEventManager;
+import com.github.jonathanxd.spongeandbukkitbridge.statics.Implementation;
 
 /**
  * Created by jonathan on 20/01/16.
  */
-public class EventManagerSBImpl implements EventManagerSB {
+public class EventManagerSBImpl extends AbstractEventManager {
 
-    private static final Set<Object> listeners = new HashSet<>();
 
-    @Override
-    public void registerListener(Object plugin, Object listener) {
-        listeners.add(listener);
+    protected EventManagerSBImpl(Implementation implementation) {
+        super(implementation);
     }
-
-    @Override
-    public void callEvent(Event event) {
-        for(Object instance : listeners) {
-            Collection<ListenerData> datas = ListenerData.fromObject(instance);
-            datas.stream().filter(data -> data.getEventClass() == event.getClass()).forEach(data -> ListenerData.invoke(data, event));
-        }
-    }
-
 }

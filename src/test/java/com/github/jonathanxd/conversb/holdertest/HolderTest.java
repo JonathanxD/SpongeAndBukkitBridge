@@ -35,7 +35,7 @@ import java.util.logging.Logger;
 import com.github.jonathanxd.spongeandbukkitbridge.api.logging.LogData;
 import com.github.jonathanxd.spongeandbukkitbridge.api.logging.LoggerSB;
 import com.github.jonathanxd.spongeandbukkitbridge.api.plugin.PluginContainer;
-import com.github.jonathanxd.spongeandbukkitbridge.plugin.PluginDataBuilder;
+import com.github.jonathanxd.spongeandbukkitbridge.plugin.PluginData;
 import com.github.jonathanxd.spongeandbukkitbridge.plugin.PluginHolder;
 
 /**
@@ -45,7 +45,7 @@ public class HolderTest {
 
     @Test
     public void holderTest() {
-        PluginHolder<HolderTest> holder = new PluginHolder<>(new PluginDataBuilder("Axy", "com.axy", "1.0", new String[]{}, HolderTest.class), this);
+        PluginHolder<HolderTest> holder = new PluginHolder<>(new PluginData("Axy", "com.axy", "1.0", new PluginData.Dependency[]{}, HolderTest.class), this);
 
         holder.setLoggerSB(new LoggerSB<Logger>(Logger.getLogger("HolderTest")) {
             @Override

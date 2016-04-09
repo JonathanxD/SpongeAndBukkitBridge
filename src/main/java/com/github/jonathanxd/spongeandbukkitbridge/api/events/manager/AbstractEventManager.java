@@ -28,30 +28,61 @@
 package com.github.jonathanxd.spongeandbukkitbridge.api.events.manager;
 
 import com.github.jonathanxd.spongeandbukkitbridge.api.events.Event;
-import com.github.jonathanxd.spongeandbukkitbridge.api.events.ListenerData;
+import com.github.jonathanxd.spongeandbukkitbridge.api.events.Listener;
+import com.github.jonathanxd.spongeandbukkitbridge.api.events.ListenerAnnotationImpl;
+import com.github.jonathanxd.spongeandbukkitbridge.api.events.data.EventListenerData;
+import com.github.jonathanxd.spongeandbukkitbridge.api.events.listener.EventListener;
+import com.github.jonathanxd.spongeandbukkitbridge.api.events.manager.caller.EventCaller;
+import com.github.jonathanxd.spongeandbukkitbridge.api.logging.LoggerSB;
+import com.github.jonathanxd.spongeandbukkitbridge.statics.Implementation;
 
-import java.util.Collection;
-import java.util.HashSet;
+import java.lang.reflect.Method;
 import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * Created by jonathan on 27/03/16.
  */
 public abstract class AbstractEventManager implements EventManagerSB {
 
-    private static final Set<Object> listeners = new HashSet<>();
+    private static final Set<EventListenerData> listeners = new TreeSet<>(new EventListenerData.Comparator());
+
+    private final Implementation implementation;
+    private final LoggerSB<?> logger;
+    private final EventCaller eventCaller;
+
+    protected AbstractEventManager(Implementation implementation) {
+        this.implementation = implementation;
+        this.logger = implementation.getLogger();
+        this.eventCaller = new EventCaller(implementation);
+    }
+
+    @Override
+    public <E extends Event, T extends EventListener<E>> void registerEvent(Object plugin, Class<E> eventClass, T eventHandler, ListenerAnnotationImpl listenerAnnotation) {
+        EventListenerData data = new EventListenerData(plugin, eventHandler, eventClass, listenerAnnotation, (Executor.GenericExecutor<E>) eventHandler::onEvent);
+
+        listeners.add(data);
+
+
+    }
+
+    private void add(Object plugin, Object listener) {
+        for (Method m : listener.getClass().getDeclaredMethods()) {
+            Listener listenerAnnotation;
+            if ((listenerAnnotation = m.getDeclaredAnnotation(Listener.class)) != null) {
+                listeners.add(new EventListenerData(plugin, listener, null, listenerAnnotation, new Executor.MethodExecutor(m)));
+            }
+        }
+    }
 
     @Override
     public void registerListener(Object plugin, Object listener) {
-        listeners.add(listener);
+        add(plugin, listener);
     }
 
     @Override
     public void callEvent(Event event) {
-        for(Object instance : listeners) {
-            Collection<ListenerData> datas = ListenerData.fromObject(instance);
-            datas.stream().filter(data -> data.getEventClass() == event.getClass()).forEach(data -> ListenerData.invoke(data, event));
-        }
+        eventCaller.call(event, listeners);
     }
 
 }

@@ -27,13 +27,13 @@
  */
 package com.github.jonathanxd.spongeandbukkitbridge.implementation.sponge.impl;
 
+import com.github.jonathanxd.spongeandbukkitbridge.api.events.manager.AbstractEventManager;
 import com.github.jonathanxd.spongeandbukkitbridge.api.events.manager.EventManagerSB;
 import com.github.jonathanxd.spongeandbukkitbridge.api.ievents.AbstractIIEventManager;
 import com.github.jonathanxd.spongeandbukkitbridge.api.ievents.IEventManager;
 import com.github.jonathanxd.spongeandbukkitbridge.api.logging.LoggerSB;
-import com.github.jonathanxd.spongeandbukkitbridge.implementation.sponge.impl.event.EventManagerSBImpl;
 import com.github.jonathanxd.spongeandbukkitbridge.implementation.sponge.impl.logger.LoggerSBImpl;
-import com.github.jonathanxd.spongeandbukkitbridge.plugin.PluginDataBuilder;
+import com.github.jonathanxd.spongeandbukkitbridge.plugin.PluginData;
 import com.github.jonathanxd.spongeandbukkitbridge.plugin.PluginHolder;
 import com.github.jonathanxd.spongeandbukkitbridge.statics.AbstractImplementation;
 
@@ -49,8 +49,11 @@ public class SpongeImplementation extends AbstractImplementation {
     private static final String VERSION = "1.0";
     private static final String SPONGE_TARGET_VERSION = "4.0.3";
     private static final String MC_TARGET_VERSION = "1.8.9";
-    private static final EventManagerSB manager = new EventManagerSBImpl();
-    private static final IEventManager imanager = new AbstractIIEventManager() {};
+
+    private EventManagerSB manager = new AbstractEventManager(this) {
+    };
+    private IEventManager imanager = new AbstractIIEventManager() {
+    };
     private final LoggerSB loggerSB;
     private final Game game;
     private final Logger logger;
@@ -78,18 +81,18 @@ public class SpongeImplementation extends AbstractImplementation {
 
     @Override
     public void onPluginLoadStart(PluginHolder<?> pluginHolder) {
-        PluginDataBuilder pluginDataBuilder = pluginHolder.getPluginDataBuilder();
+        PluginData pluginData = pluginHolder.getPluginData();
 
-        logger.info(String.format("Loading plugin %s", pluginDataBuilder.getName()));
+        logger.info(String.format("Loading plugin %s", pluginData.getName()));
 
-        pluginHolder.setLoggerSB(new LoggerSBImpl(LoggerFactory.getLogger(pluginDataBuilder.getName())));
+        pluginHolder.setLoggerSB(new LoggerSBImpl(LoggerFactory.getLogger(pluginData.getName())));
     }
 
     @Override
     public boolean onPluginLoad(PluginHolder<?> pluginHolder) {
-        PluginDataBuilder pluginDataBuilder = pluginHolder.getPluginDataBuilder();
+        PluginData pluginData = pluginHolder.getPluginData();
 
-        logger.info(String.format("Loaded plugin %s!", pluginDataBuilder.getName()));
+        logger.info(String.format("Loaded plugin %s!", pluginData.getName()));
 
         return true;
     }

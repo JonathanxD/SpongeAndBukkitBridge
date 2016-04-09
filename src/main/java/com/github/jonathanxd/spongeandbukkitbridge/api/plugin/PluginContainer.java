@@ -29,7 +29,7 @@ package com.github.jonathanxd.spongeandbukkitbridge.api.plugin;
 
 import com.github.jonathanxd.interceptor.annotation.Intercept;
 import com.github.jonathanxd.spongeandbukkitbridge.api.logging.LoggerSB;
-import com.github.jonathanxd.spongeandbukkitbridge.plugin.PluginDataBuilder;
+import com.github.jonathanxd.spongeandbukkitbridge.plugin.PluginData;
 import com.github.jonathanxd.spongeandbukkitbridge.plugin.PluginHolder;
 
 /**
@@ -42,8 +42,8 @@ import com.github.jonathanxd.spongeandbukkitbridge.plugin.PluginHolder;
  */
 public interface PluginContainer<T> {
 
-    @Intercept(ifClass = "com.github.jonathanxd.spongeandbukkitbridge.plugin.PluginHolder", method = "getPluginDataBuilder")
-    PluginDataBuilder getData();
+    @Intercept(ifClass = "com.github.jonathanxd.spongeandbukkitbridge.plugin.PluginHolder", method = "getPluginData")
+    PluginData getData();
 
     @Intercept(ifClass = "com.github.jonathanxd.spongeandbukkitbridge.plugin.PluginHolder", method = "getPluginInstance")
     T getInstance();

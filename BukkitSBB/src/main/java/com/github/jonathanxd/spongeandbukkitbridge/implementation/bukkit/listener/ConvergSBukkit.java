@@ -30,8 +30,10 @@ package com.github.jonathanxd.spongeandbukkitbridge.implementation.bukkit.listen
 import java.util.Optional;
 
 import com.github.jonathanxd.spongeandbukkitbridge.api.events.Event;
-import com.github.jonathanxd.spongeandbukkitbridge.api.events.player.PlayerInteractEvent;
-import com.github.jonathanxd.spongeandbukkitbridge.implementation.bukkit.impl.PlayerBack;
+import com.github.jonathanxd.spongeandbukkitbridge.api.events.achievement.GrantAchievementEvent;
+import com.github.jonathanxd.spongeandbukkitbridge.api.events.entity.livingentity.player.PlayerInteractEvent;
+import com.github.jonathanxd.spongeandbukkitbridge.implementation.bukkit.impl.achievement.BukkitAchievement;
+import com.github.jonathanxd.spongeandbukkitbridge.implementation.bukkit.impl.bukkit.entity.living.BukkitPlayer;
 
 /**
  * Created by jonathan on 20/01/16.
@@ -42,8 +44,17 @@ public class ConvergSBukkit {
 
         if(event instanceof org.bukkit.event.player.PlayerInteractEvent) {
             org.bukkit.event.player.PlayerInteractEvent interactEvent = (org.bukkit.event.player.PlayerInteractEvent) event;
-            PlayerInteractEvent otherEvent = new PlayerInteractEvent(new PlayerBack(interactEvent.getPlayer()));
+            PlayerInteractEvent otherEvent = new PlayerInteractEvent(new BukkitPlayer(interactEvent.getPlayer()));
             return Optional.of(otherEvent);
+        }
+
+        if(event instanceof org.bukkit.event.player.PlayerAchievementAwardedEvent) {
+            org.bukkit.event.player.PlayerAchievementAwardedEvent achievementAwardedEvent = (org.bukkit.event.player.PlayerAchievementAwardedEvent) event;
+
+            GrantAchievementEvent otherEvent = new GrantAchievementEvent(new BukkitPlayer(achievementAwardedEvent.getPlayer()), BukkitAchievement.get(achievementAwardedEvent.getAchievement()));
+
+            return Optional.of(otherEvent);
+
         }
 
         return Optional.empty();

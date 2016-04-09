@@ -28,13 +28,22 @@
 package com.github.jonathanxd.spongeandbukkitbridge.api.events.manager;
 
 import com.github.jonathanxd.spongeandbukkitbridge.api.events.Event;
+import com.github.jonathanxd.spongeandbukkitbridge.api.events.ListenerAnnotationImpl;
+import com.github.jonathanxd.spongeandbukkitbridge.api.events.listener.EventListener;
 
 /**
  * Created by jonathan on 20/01/16.
  */
 public interface EventManagerSB {
 
+    <E extends Event, T extends EventListener<E>> void registerEvent(Object plugin, Class<E> eventClass, T eventHandler, ListenerAnnotationImpl listenerAnnotation);
+
     void registerListener(Object plugin, Object eventListener);
     void callEvent(Event event);
+
+    default <T extends Event> T call(T event) {
+        this.callEvent(event);
+        return event;
+    }
 
 }

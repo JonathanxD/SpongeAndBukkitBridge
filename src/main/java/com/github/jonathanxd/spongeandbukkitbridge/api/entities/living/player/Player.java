@@ -28,10 +28,11 @@
 package com.github.jonathanxd.spongeandbukkitbridge.api.entities.living.player;
 
 import com.github.jonathanxd.spongeandbukkitbridge.api.common.MessageReceiver;
+import com.github.jonathanxd.spongeandbukkitbridge.api.entities.living.HumanEntity;
 import com.github.jonathanxd.spongeandbukkitbridge.api.entities.living.LivingEntity;
 
 /**
  * Created by jonathan on 20/01/16.
  */
-public interface Player extends LivingEntity, MessageReceiver {
+public interface Player extends HumanEntity {
 }

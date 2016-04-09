@@ -42,7 +42,7 @@ public class MethodFinder {
     /**
      * Find method in a class
      * @param methodSpec Method specification
-     * @param clazz Class to find method
+     * @param clazz Class to loader method
      * @param analiseSuper Analise super methods
      * @return Method or empty Optional
      */

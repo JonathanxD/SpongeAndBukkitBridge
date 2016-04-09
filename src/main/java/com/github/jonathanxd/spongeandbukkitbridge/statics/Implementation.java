@@ -27,12 +27,14 @@
  */
 package com.github.jonathanxd.spongeandbukkitbridge.statics;
 
+import com.github.jonathanxd.spongeandbukkitbridge.SBBridge;
 import com.github.jonathanxd.spongeandbukkitbridge.api.events.manager.EventManagerSB;
 import com.github.jonathanxd.spongeandbukkitbridge.api.ievents.AbstractIIEventManager;
 import com.github.jonathanxd.spongeandbukkitbridge.api.ievents.IEventManager;
 import com.github.jonathanxd.spongeandbukkitbridge.api.logging.LoggerSB;
 import com.github.jonathanxd.spongeandbukkitbridge.api.plugin.PluginContainer;
 import com.github.jonathanxd.spongeandbukkitbridge.plugin.PluginHolder;
+import com.github.jonathanxd.spongeandbukkitbridge.plugin.loader.dependency.DependencySolver;
 
 import java.io.File;
 import java.util.Optional;
@@ -111,4 +113,8 @@ public interface Implementation {
     Optional<PluginContainer<?>> getPlugin(Object instance);
 
     Optional<PluginContainer<?>> getPlugin(String id);
+
+    default DependencySolver getDependencySolver() {
+        return SBBridge.getDependecySolver();
+    }
 }

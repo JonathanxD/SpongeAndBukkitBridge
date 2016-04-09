@@ -30,4 +30,58 @@ package com.github.jonathanxd.spongeandbukkitbridge.api.entities;
 /**
  * Created by jonathan on 20/01/16.
  */
-public interface Entity {}
+public interface Entity {
+
+    // TODO EntityType getType();
+
+    // TODO World getWorld();
+
+    // TODO Location<World> getLocation();
+
+    // TODO void setLocation(Location<World> location);
+
+    // TODO getRotation();
+
+    // TODO void setRotation(rotation);
+
+    // TODO void setLocationAndRotation(Location<World> location, rotation);
+
+    // TODO Optional<Entity> getPassenger();
+
+    // TODO boolean setPassenger(Entity entity);
+
+    // TODO Optional<Entity> getVehicle();
+
+    // TODO boolean setVehicle(Entity entity);
+
+    // TODO Entity getBaseVehicle();
+
+    // TODO default double getVelocity();
+
+    // TODO boolean setVelocity(Vector3d vector3d);
+
+    // TODO boolean isOnGround();
+
+    // TODO boolean isRemoved();
+
+    // TODO boolean isLoaded();
+
+    // TODO void remove();
+
+    // TODO damage(double damage, Source damageSource)?
+
+    // TODO default Collection<Entity> getNearbyEntities(double distance);
+
+    // TODO default Collection<Entity> getNearbyEntities(Predicate<Entity> predicate);
+
+    // TODO Optional<UUID> getCreator();
+
+    // TODO Optional<UUID> getNotifier();
+
+    // TODO void setCreator(@Nullable UUID uuid);
+
+    // TODO void setNotifier(@Nullable UUID uuid);
+
+    // TODO default boolean canSee(Entity entity);
+
+}

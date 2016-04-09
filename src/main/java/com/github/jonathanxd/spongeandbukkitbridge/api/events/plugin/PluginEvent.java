@@ -29,6 +29,7 @@ package com.github.jonathanxd.spongeandbukkitbridge.api.events.plugin;
 
 import com.github.jonathanxd.spongeandbukkitbridge.api.events.AbstractCancellableEvent;
 import com.github.jonathanxd.spongeandbukkitbridge.api.plugin.PluginContainer;
+import com.github.jonathanxd.spongeandbukkitbridge.plugin.PluginData;
 import com.github.jonathanxd.spongeandbukkitbridge.utils.Holder;
 
 /**
@@ -36,19 +37,19 @@ import com.github.jonathanxd.spongeandbukkitbridge.utils.Holder;
  */
 public abstract class PluginEvent extends AbstractCancellableEvent {
 
-    private final PluginContainer<?> pluginContainer;
+    private final PluginData pluginData;
 
-    protected PluginEvent(PluginContainer<?> pluginContainer) {
-        super(Holder.of(pluginContainer));
-        this.pluginContainer = pluginContainer;
+    protected PluginEvent(PluginData pluginData) {
+        super(Holder.of(pluginData));
+        this.pluginData = pluginData;
     }
 
     /**
-     * Gets the PluginContainer
+     * Gets the PluginData
      *
-     * @return PluginContainer Proxy
+     * @return PluginData
      */
-    public PluginContainer<?> getPluginContainer() {
-        return pluginContainer;
+    public PluginData getPluginData() {
+        return pluginData;
     }
 }

@@ -92,7 +92,7 @@ public abstract class AbstractImplementation implements Implementation {
 
     @Override
     public Optional<PluginContainer<?>> getPlugin(String id) {
-        Optional<PluginHolder<?>> any = pluginList.stream().filter(data -> data.getPluginDataBuilder().getId().equals(id)).findAny();
+        Optional<PluginHolder<?>> any = pluginList.stream().filter(data -> data.getPluginData().getId().equals(id)).findAny();
 
         if(any.isPresent())
             return Optional.of(any.get().getPluginContainer());

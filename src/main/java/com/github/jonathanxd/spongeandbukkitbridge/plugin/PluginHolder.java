@@ -38,19 +38,19 @@ import com.github.jonathanxd.spongeandbukkitbridge.api.plugin.PluginContainer;
 public class PluginHolder<T> {
 
     private final PluginContainer<T> pluginContainer;
-    private final PluginDataBuilder pluginDataBuilder;
+    private final PluginData pluginData;
     private LoggerSB<?> loggerSB;
     private final T pluginInstance;
 
     @SuppressWarnings("unchecked")
-    public PluginHolder(PluginDataBuilder pluginDataBuilder, T pluginInstance) {
-        this.pluginDataBuilder = pluginDataBuilder;
+    public PluginHolder(PluginData pluginData, T pluginInstance) {
+        this.pluginData = pluginData;
         this.pluginInstance = pluginInstance;
         pluginContainer = (PluginContainer<T>) Interceptor.builder(null, this, new Class<?>[]{PluginContainer.class}).buildProxy().useCache().getProxy();
     }
 
-    public PluginDataBuilder getPluginDataBuilder() {
-        return pluginDataBuilder;
+    public PluginData getPluginData() {
+        return pluginData;
     }
 
     public T getPluginInstance() {

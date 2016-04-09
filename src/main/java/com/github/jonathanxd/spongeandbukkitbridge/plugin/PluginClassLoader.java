@@ -27,7 +27,6 @@
  */
 package com.github.jonathanxd.spongeandbukkitbridge.plugin;
 
-import com.github.jonathanxd.spongeandbukkitbridge.api.events.classloader.FindingClassEvent;
 import com.github.jonathanxd.spongeandbukkitbridge.api.ievents.loader.ClassLoadEvent;
 import com.github.jonathanxd.spongeandbukkitbridge.statics.Implementation;
 
@@ -42,6 +41,7 @@ public class PluginClassLoader extends URLClassLoader {
 
     private final File pluginFile;
     private final Implementation implementation;
+    private final PluginData pluginData = null;
 
     public PluginClassLoader(URL[] urls, ClassLoader parent, File pluginFile, Implementation implementation) {
         super(urls, parent);
@@ -63,6 +63,10 @@ public class PluginClassLoader extends URLClassLoader {
         }
 
         return super.loadClass(name);
+    }
+
+    public PluginData getPluginData() {
+        return pluginData;
     }
 
     @Override

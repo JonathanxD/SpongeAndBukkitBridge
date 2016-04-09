@@ -28,7 +28,7 @@
 package com.github.jonathanxd.spongeandbukkitbridge.implementation.sponge.sponge;
 
 import com.github.jonathanxd.spongeandbukkitbridge.api.events.manager.EventManagerSB;
-import com.github.jonathanxd.spongeandbukkitbridge.api.events.player.PlayerInteractEvent;
+import com.github.jonathanxd.spongeandbukkitbridge.api.events.entity.livingentity.player.PlayerInteractEvent;
 import com.github.jonathanxd.spongeandbukkitbridge.implementation.sponge.sponge.entity.humanoid.SpongePlayerWrapper;
 
 import org.spongepowered.api.entity.living.player.Player;

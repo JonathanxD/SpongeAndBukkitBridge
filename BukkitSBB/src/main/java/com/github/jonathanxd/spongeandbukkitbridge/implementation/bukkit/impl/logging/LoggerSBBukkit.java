@@ -30,7 +30,7 @@ package com.github.jonathanxd.spongeandbukkitbridge.implementation.bukkit.impl.l
 import com.github.jonathanxd.spongeandbukkitbridge.api.logging.Level;
 import com.github.jonathanxd.spongeandbukkitbridge.api.logging.LogData;
 import com.github.jonathanxd.spongeandbukkitbridge.api.logging.LoggerSB;
-import com.github.jonathanxd.spongeandbukkitbridge.plugin.PluginDataBuilder;
+import com.github.jonathanxd.spongeandbukkitbridge.plugin.PluginData;
 
 import java.util.Optional;
 import java.util.logging.Logger;
@@ -39,12 +39,12 @@ import java.util.logging.Logger;
  * Created by jonathan on 27/03/16.
  */
 public class LoggerSBBukkit extends LoggerSB<Logger> {
-    private final PluginDataBuilder pluginDataBuilder;
+    private final PluginData pluginData;
 
 
-    public LoggerSBBukkit(PluginDataBuilder pluginDataBuilder, Logger logger) {
+    public LoggerSBBukkit(PluginData pluginData, Logger logger) {
         super(logger);
-        this.pluginDataBuilder = pluginDataBuilder;
+        this.pluginData = pluginData;
     }
 
     @SuppressWarnings("Duplicates")
@@ -72,7 +72,7 @@ public class LoggerSBBukkit extends LoggerSB<Logger> {
     public void log(LogData data) {
 
         Optional<Throwable> throwableOptional = data.getThrowable();
-        String tag = "["+pluginDataBuilder.getName()+"] ";
+        String tag = "["+ pluginData.getName()+"] ";
         if(throwableOptional.isPresent()) {
             getLoggerBase().log(wrap(data.getLevel()), tag + data.getFormatted(), throwableOptional.get());
         }else{

@@ -29,7 +29,10 @@ package com.github.jonathanxd.spongeandbukkitbridge;
 
 
 import com.github.jonathanxd.spongeandbukkitbridge.api.ievents.loader.ClassLoadEvent;
-import com.github.jonathanxd.spongeandbukkitbridge.plugin.PluginLoader;
+import com.github.jonathanxd.spongeandbukkitbridge.plugin.loader.CommonPluginLoader;
+import com.github.jonathanxd.spongeandbukkitbridge.plugin.loader.PluginLoader;
+import com.github.jonathanxd.spongeandbukkitbridge.plugin.loader.dependency.CommonDependencySolver;
+import com.github.jonathanxd.spongeandbukkitbridge.plugin.loader.dependency.DependencySolver;
 import com.github.jonathanxd.spongeandbukkitbridge.statics.Implementation;
 import com.github.jonathanxd.spongeandbukkitbridge.utils.Reflection;
 
@@ -40,35 +43,34 @@ public class SBBridge implements ISBBridge {
     private static final Implementation implementation = null;
     private static final PluginLoader loader = null;
 
+    public static Implementation getImplementation() {
+        return SBBridge.implementation;
+    }
+
     @SuppressWarnings("ConstantConditions")
     public void init(Implementation implementation) throws IllegalStateException {
-        if(SBBridge.implementation == null && SBBridge.loader == null){
+        if (SBBridge.implementation == null && SBBridge.loader == null) {
             Reflection.setField(null, SBBridge.class, "implementation", implementation);
-            Reflection.setField(null, SBBridge.class, "loader", new PluginLoader(implementation));
-        }else{
+            Reflection.setField(null, SBBridge.class, "loader", new CommonPluginLoader(implementation, new CommonDependencySolver()));
+        } else {
             throw new IllegalStateException("Already initialized!");
         }
 
         initListeners();
         initConvergPlugins(implementation.getPluginsFolder());
+        //initOtherPlugins(implementation)
     }
 
     private void initListeners() {
         implementation.getIEventManager().register(ClassLoadEvent.class, new SBListener(implementation));
     }
 
-    private void initConvergPlugins(File pluginsFolder) {
-        File[] files = pluginsFolder.listFiles();
-        if(files != null) {
-            for(File file : files) {
-                if(file.getName().endsWith(".jar")) {
-                    loader.load(file);
-                }
-            }
-        }
+    public static DependencySolver getDependecySolver() {
+        return loader.getSolver();
     }
 
-    public static Implementation getImplementation() {
-        return SBBridge.implementation;
+    private void initConvergPlugins(File pluginsFolder) {
+        loader.indexPlugins(pluginsFolder, ".jar");
+        loader.loadAll();
     }
 }

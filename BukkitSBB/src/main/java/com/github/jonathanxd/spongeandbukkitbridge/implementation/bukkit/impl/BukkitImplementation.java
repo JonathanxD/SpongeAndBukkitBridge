@@ -27,29 +27,28 @@
  */
 package com.github.jonathanxd.spongeandbukkitbridge.implementation.bukkit.impl;
 
+import com.github.jonathanxd.spongeandbukkitbridge.api.events.manager.EventManagerSB;
 import com.github.jonathanxd.spongeandbukkitbridge.api.ievents.AbstractIIEventManager;
 import com.github.jonathanxd.spongeandbukkitbridge.api.ievents.IEventManager;
 import com.github.jonathanxd.spongeandbukkitbridge.api.logging.LoggerSB;
+import com.github.jonathanxd.spongeandbukkitbridge.implementation.bukkit.impl.logging.LoggerSBBukkit;
+import com.github.jonathanxd.spongeandbukkitbridge.plugin.PluginData;
+import com.github.jonathanxd.spongeandbukkitbridge.plugin.PluginHolder;
+import com.github.jonathanxd.spongeandbukkitbridge.statics.AbstractImplementation;
 
 import org.bukkit.Bukkit;
 
 import java.util.Arrays;
 import java.util.logging.Logger;
 
-import com.github.jonathanxd.spongeandbukkitbridge.api.events.manager.EventManagerSB;
-import com.github.jonathanxd.spongeandbukkitbridge.api.logging.LoggerSBLegacy;
-import com.github.jonathanxd.spongeandbukkitbridge.implementation.bukkit.impl.logging.LoggerSBBukkit;
-import com.github.jonathanxd.spongeandbukkitbridge.plugin.PluginDataBuilder;
-import com.github.jonathanxd.spongeandbukkitbridge.plugin.PluginHolder;
-import com.github.jonathanxd.spongeandbukkitbridge.statics.AbstractImplementation;
-
 /**
  * Created by jonathan on 20/01/16.
  */
 public class BukkitImplementation extends AbstractImplementation {
     private static final LoggerSB logger = new LoggerSBImpl();
-    private static final EventManagerSB manager = new EventManagerSBImpl();
-    private static final IEventManager imanager = new AbstractIIEventManager() {};
+    private static final IEventManager imanager = new AbstractIIEventManager() {
+    };
+    private final EventManagerSB manager = new EventManagerSBImpl(this);
 
     @Override
     public String getName() {
@@ -68,18 +67,18 @@ public class BukkitImplementation extends AbstractImplementation {
 
     @Override
     public void onPluginLoadStart(PluginHolder<?> pluginHolder) {
-        pluginHolder.setLoggerSB(new LoggerSBBukkit(pluginHolder.getPluginDataBuilder(), Logger.getGlobal()));
+        pluginHolder.setLoggerSB(new LoggerSBBukkit(pluginHolder.getPluginData(), Logger.getGlobal()));
     }
 
     @Override
     public boolean onPluginLoad(PluginHolder<?> pluginHolder) {
 
-        PluginDataBuilder pluginDataBuilder = pluginHolder.getPluginDataBuilder();
+        PluginData pluginData = pluginHolder.getPluginData();
 
-        System.out.println("Loading plugin: Name = "+pluginDataBuilder.getName());
-        System.out.println("Loading plugin: Id = "+pluginDataBuilder.getId());
-        System.out.println("Loading plugin: Version = "+pluginDataBuilder.getVersion());
-        System.out.println("Loading plugin: Dependencies = "+ Arrays.asList(pluginDataBuilder.getDependencies()));
+        System.out.println("Loading plugin: Name = " + pluginData.getName());
+        System.out.println("Loading plugin: Id = " + pluginData.getId());
+        System.out.println("Loading plugin: Version = " + pluginData.getVersion());
+        System.out.println("Loading plugin: Dependencies = " + Arrays.asList(pluginData.getDependencies()));
         return true;
     }
 
